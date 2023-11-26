@@ -15,7 +15,10 @@
                     <a class="nav-link" href="#">Add article</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="create_admin.php">Add Admin</a>
+                    <a class="nav-link" href="admin_create.php">Add Admin</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="admin_list.php">List Admin</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Pricing</a>
