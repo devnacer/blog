@@ -21,10 +21,16 @@ require_once '../includes/conn_db.php';
 
 //functions
 require_once '../includes/functions.php';
+
+//select item admin 
+$sqlStatement = $pdo->prepare('SELECT name, description FROM category WHERE id=?');
+$id = $_GET['id'];
+$sqlStatement->execute([$id]);
+$itemCategory = $sqlStatement->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container">
-    <h2 class="mt-2">Create category</h2>
+    <h2 class="mt-2">Edit category <strong><?= $itemCategory['name'] ?></strong></h2>
 
     <form method="POST">
 
@@ -32,7 +38,7 @@ require_once '../includes/functions.php';
 
         $isFormValid = true;
 
-        if (isset($_POST['createCategory'])) {
+        if (isset($_POST['updateCategory'])) {
 
                 $categoryName = $_POST['categoryName'];
                 $categoryDescription = $_POST['categoryDescription'];
@@ -66,25 +72,24 @@ require_once '../includes/functions.php';
 
 
                     // Insertion query
-                    $sql = "INSERT INTO category (name, description) VALUES (?, ?)";
+                    $sql = "UPDATE category
+                            SET name = ?,
+                                description = ?
+                            WHERE id = ?";
 
                     // Prepare the query
                     $stmt = $pdo->prepare($sql);
 
                     // Execute the query with the provided values
-                    if ($stmt->execute([$categoryName, $categoryDescription])) {
+                    if ($stmt->execute([$categoryName, $categoryDescription, $id])) {
 
-                            ?>
-                                <div class="alert alert-success" role="alert">
-                                <p>The category <strong><?=$categoryName?></strong> has been added successfully.</p>
-                                </div>
-                            <?php
+                        header('location: category_list.php');
 
                     } else {
 
                             ?>
-                                <div class="alert alert-success" role="alert">
-                                <p>Error adding the category <strong><?=$categoryName?></strong>.</p>
+                                <div class="alert alert-warning" role="alert">
+                                <p>Error updating the category <strong><?=$categoryName?></strong>.</p>
                                 </div>
                             <?php
                             
@@ -96,16 +101,15 @@ require_once '../includes/functions.php';
 
             <div class="form-group">
                 <label for="fullName" class="form-label mt-4">Name</label>
-                <input type="text" class="form-control" id="categoryName" name="categoryName" placeholder="Enter name of category" required>
+                <input type="text" class="form-control" id="categoryName" name="categoryName" placeholder="<?=$itemCategory['name']?>" required>
             </div>
 
             <div class="form-group">
                 <label for="adminName" class="form-label mt-4">Description</label>
-                <input type="text" class="form-control" id="categoryDescription" name="categoryDescription" placeholder="Enter description of category" required>
+                <input type="text" class="form-control" id="categoryDescription" name="categoryDescription" placeholder="<?=$itemCategory['description']?>" required>
             </div>
 
-
-            <input type="submit" name="createCategory" value="Create category" class="btn btn-primary mt-4 mb-4">
+            <input type="submit" name="updateCategory" value="Update category" class="btn btn-primary mt-4 mb-4">
 
     </form>
 

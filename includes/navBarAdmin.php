@@ -24,7 +24,7 @@
                     <a class="nav-link" href="category_create.php">Add category</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link" href="category_list.php">List category</a>
                 </li>
 
             </ul>

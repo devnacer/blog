@@ -26,11 +26,11 @@ require_once '../includes/functions.php';
 $sqlStatement = $pdo->prepare('SELECT fullName, adminName, email, role FROM admin WHERE id=?');
 $id = $_GET['id'];
 $sqlStatement->execute([$id]);
-$itemUpdate = $sqlStatement->fetch(PDO::FETCH_ASSOC);
+$itemAdmin = $sqlStatement->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container">
-    <h2 class="mt-2">Edit Admin <?= $itemUpdate['adminName'] ?></h2>
+    <h2 class="mt-2">Edit admin <strong><?= $itemAdmin['adminName'] ?></strong></h2>
 
     <form method="POST">
 
@@ -140,16 +140,12 @@ $itemUpdate = $sqlStatement->fetch(PDO::FETCH_ASSOC);
                     // Execute the query with the provided values
                     if ($stmt->execute([$fullName, $adminName, $email, $role, $password, $id])) {
 
-                            ?>
-                                <div class="alert alert-success" role="alert">
-                                <p>The administrator <strong><?=$adminName?></strong> has been updated successfully.</p>
-                                </div>
-                            <?php
+                        header('location: admin_list.php');
 
                     } else {
 
                             ?>
-                                <div class="alert alert-success" role="alert">
+                                <div class="alert alert-warning" role="alert">
                                 <p>Error updating the administrator <strong><?=$adminName?></strong>.</p>
                                 </div>
                             <?php
@@ -162,22 +158,22 @@ $itemUpdate = $sqlStatement->fetch(PDO::FETCH_ASSOC);
 
             <div class="form-group">
                 <label for="fullName" class="form-label mt-4">Full Name</label>
-                <input type="text" class="form-control" id="fullName" name="fullName" placeholder="<?= $itemUpdate['fullName'] ?>" required>
+                <input type="text" class="form-control" id="fullName" name="fullName" placeholder="<?= $itemAdmin['fullName'] ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="adminName" class="form-label mt-4">Admin Name</label>
-                <input type="text" class="form-control" id="adminName" name="adminName" placeholder="<?= $itemUpdate['adminName'] ?>" required>
+                <input type="text" class="form-control" id="adminName" name="adminName" placeholder="<?= $itemAdmin['adminName'] ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="email" class="form-label mt-4">Email address</label>
-                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="<?= $itemUpdate['email'] ?>" required>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="<?= $itemAdmin['email'] ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="role" class="form-label mt-4">Role</label>
-                <input type="text" class="form-control" id="role" name="role" placeholder="<?= $itemUpdate['role'] ?>" required>
+                <input type="text" class="form-control" id="role" name="role" placeholder="<?= $itemAdmin['role'] ?>" required>
             </div>
 
             <div class="form-group">
