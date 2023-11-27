@@ -130,7 +130,7 @@ require_once '../includes/functions.php';
 
                             ?>
                                 <div class="alert alert-success" role="alert">
-                                <p>The administrator has been added successfully.</p>
+                                <p>The administrator <strong><?=$adminName?></strong> has been added successfully.</p>
                                 </div>
                             <?php
 
@@ -138,7 +138,7 @@ require_once '../includes/functions.php';
 
                             ?>
                                 <div class="alert alert-success" role="alert">
-                                <p>Error adding the administrator.</p>
+                                <p>Error adding the administrator <strong><?=$adminName?></strong>.</p>
                                 </div>
                             <?php
                             

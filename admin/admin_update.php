@@ -22,10 +22,10 @@ require_once '../includes/conn_db.php';
 //functions
 require_once '../includes/functions.php';
 
+//select item admin 
 $sqlStatement = $pdo->prepare('SELECT fullName, adminName, email, role FROM admin WHERE id=?');
 $id = $_GET['id'];
 $sqlStatement->execute([$id]);
-
 $itemUpdate = $sqlStatement->fetch(PDO::FETCH_ASSOC);
 ?>
 
@@ -38,7 +38,7 @@ $itemUpdate = $sqlStatement->fetch(PDO::FETCH_ASSOC);
 
         $isFormValid = true;
 
-        if (isset($_POST['createAdmin'])) {
+        if (isset($_POST['editAdmin'])) {
 
                 $fullName = $_POST['fullName'];
                 $adminName = $_POST['adminName'];
@@ -126,17 +126,23 @@ $itemUpdate = $sqlStatement->fetch(PDO::FETCH_ASSOC);
                     $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hash the password using bcrypt
 
                     // Insertion query
-                    $sql = "INSERT INTO admin (fullname, adminName, email, role, password) VALUES (?, ?, ?, ?, ?)";
+                    $sql = "UPDATE admin
+                            SET fullname = ?,
+                                adminName = ?,
+                                email = ?,
+                                role = ?,
+                                password = ? 
+                            WHERE id = ?";
 
                     // Prepare the query
                     $stmt = $pdo->prepare($sql);
 
                     // Execute the query with the provided values
-                    if ($stmt->execute([$fullName, $adminName, $email, $role, $password])) {
+                    if ($stmt->execute([$fullName, $adminName, $email, $role, $password, $id])) {
 
                             ?>
                                 <div class="alert alert-success" role="alert">
-                                <p>The administrator has been added successfully.</p>
+                                <p>The administrator <strong><?=$adminName?></strong> has been updated successfully.</p>
                                 </div>
                             <?php
 
@@ -144,7 +150,7 @@ $itemUpdate = $sqlStatement->fetch(PDO::FETCH_ASSOC);
 
                             ?>
                                 <div class="alert alert-success" role="alert">
-                                <p>Error adding the administrator.</p>
+                                <p>Error updating the administrator <strong><?=$adminName?></strong>.</p>
                                 </div>
                             <?php
                             
@@ -185,7 +191,7 @@ $itemUpdate = $sqlStatement->fetch(PDO::FETCH_ASSOC);
             </div>
 
 
-            <input type="submit" name="createAdmin" value="Create Admin" class="btn btn-primary mt-4 mb-4">
+            <input type="submit" name="editAdmin" value="Edit Admin" class="btn btn-primary mt-4 mb-4">
 
     </form>
 
