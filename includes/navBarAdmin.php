@@ -26,6 +26,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="category_list.php">List category</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="article_create.php">Add article</a>
+                </li>
 
             </ul>
 
