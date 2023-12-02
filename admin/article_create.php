@@ -21,6 +21,11 @@ require_once '../includes/conn_db.php';
 
 //functions
 require_once '../includes/functions.php';
+
+// Prepare and execute the SELECT query 'select categories'
+$sqlStatement = $pdo->prepare('SELECT id, name FROM category');
+$sqlStatement->execute();
+$categories = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container">
@@ -36,6 +41,7 @@ require_once '../includes/functions.php';
 
                 $title = $_POST['title'];
                 $content = $_POST['content'];
+                $category = $_POST['category'];
 
                 // Validate the "title" field
                 if (!isValidName($title, $minLengthTitle, $maxLengthTitle)) {
@@ -58,6 +64,7 @@ require_once '../includes/functions.php';
                             </div>
                         <?php
 
+                    $isFormValid = false;
                 }
 
 
@@ -66,13 +73,13 @@ require_once '../includes/functions.php';
                 if ($isFormValid) {
 
                     // Insertion query
-                    $sql = "INSERT INTO article (title, content) VALUES (?, ?)";
+                    $sql = "INSERT INTO article (title, content, id_category) VALUES (?, ?, ?)";
 
                     // Prepare the query
                     $stmt = $pdo->prepare($sql);
 
                     // Execute the query with the provided values
-                    if ($stmt->execute([$title, $content ])) {
+                    if ($stmt->execute([$title, $content, $category])) {
 
                             ?>
                                 <div class="alert alert-success" role="alert">
@@ -101,9 +108,22 @@ require_once '../includes/functions.php';
 
             <div class="form-group">
                 <label for="content" class="form-label mt-4">Content</label>
-                <!-- <input type="text" class="form-control" id="content" name="content" placeholder="Enter the content" required> -->
                 <textarea class="form-control" id="content" name="content" placeholder="Enter the content (min. 7, max. 2000 characters" cols="30" rows="10" required></textarea>
             </div>
+
+            <div class="form-group">
+                <label for="category" class="form-label mt-4">Category</label>
+                <select name="category" class="form-control">
+                    <option value="">Choose a category</option>
+                    <?php foreach($categories as $category) :?>
+                    <option value="<?= $category['id']?>">
+                            <?= $category['name']?>
+                    </option>
+                    <?php endforeach?>
+                </select>
+            </div>
+
+            
 
             <input type="submit" name="createArticle" value="Add article" class="btn btn-primary mt-4 mb-4">
 
