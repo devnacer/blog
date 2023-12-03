@@ -40,6 +40,7 @@ require_once '../includes/functions.php';
                 $role = $_POST['role'];
                 $password = $_POST['password'];
                 $confirmPassword = $_POST['confirmPassword'];
+                $dateCreation = date('Y-m-d H:i:s'); 
 
                 // Validate the full name
                 if (!isValidName($fullName, $minLengthName, $maxLengthName)) {
@@ -117,16 +118,16 @@ require_once '../includes/functions.php';
 
                 if ($isFormValid) {
 
-                    $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hash the password using bcrypt
+                    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password using bcrypt
 
                     // Insertion query
-                    $sql = "INSERT INTO admin (fullname, adminName, email, role, password) VALUES (?, ?, ?, ?, ?)";
+                    $sql = "INSERT INTO admin (fullname, adminName, email, role, password, date_creation) VALUES (?, ?, ?, ?, ?, ?)";
 
                     // Prepare the query
                     $stmt = $pdo->prepare($sql);
 
                     // Execute the query with the provided values
-                    if ($stmt->execute([$fullName, $adminName, $email, $role, $password])) {
+                    if ($stmt->execute([$fullName, $adminName, $email, $role, $password, $dateCreation  ])) {
 
                             ?>
                                 <div class="alert alert-success" role="alert">

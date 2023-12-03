@@ -42,6 +42,7 @@ $categories = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
                 $title = $_POST['title'];
                 $content = $_POST['content'];
                 $category = $_POST['category'];
+                $dateCreation = date('Y-m-d H:i:s'); 
 
                 // Validate the "title" field
                 if (!isValidName($title, $minLengthTitle, $maxLengthTitle)) {
@@ -73,13 +74,13 @@ $categories = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
                 if ($isFormValid) {
 
                     // Insertion query
-                    $sql = "INSERT INTO article (title, content, id_category) VALUES (?, ?, ?)";
+                    $sql = "INSERT INTO article (title, content, id_category, date_creation) VALUES (?, ?, ?, ?)";
 
                     // Prepare the query
                     $stmt = $pdo->prepare($sql);
 
                     // Execute the query with the provided values
-                    if ($stmt->execute([$title, $content, $category])) {
+                    if ($stmt->execute([$title, $content, $category, $dateCreation])) {
 
                             ?>
                                 <div class="alert alert-success" role="alert">
