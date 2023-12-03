@@ -2,6 +2,9 @@
 // Define the page title
 $pageTitle = 'My Blog - Admin Area';
 
+// start session
+session_start();
+
 // Include the page header
 require_once '../includes/header.php';
 

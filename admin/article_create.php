@@ -2,6 +2,9 @@
 // Define the page title
 $pageTitle = 'My Blog - Admin Area';
 
+// start session
+session_start();
+
 // minLength and maxLength for Title
 $minLengthTitle = 3;
 $maxLengthTitle = 55;

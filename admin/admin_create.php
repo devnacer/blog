@@ -1,6 +1,8 @@
 <?php
 // Define the page title
 $pageTitle = 'My Blog - Admin Area';
+// start session
+session_start();
 
 // minLength and maxLength for fullName, adminName, role
 $minLengthName = 3;

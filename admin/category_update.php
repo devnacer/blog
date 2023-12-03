@@ -2,6 +2,9 @@
 // Define the page title
 $pageTitle = 'My Blog - Admin Area';
 
+// start session
+session_start();
+
 // minLength and maxLength for category name
 $minLengthCategoryName = 3;
 $maxLengthCategoryName = 55;

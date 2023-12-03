@@ -48,7 +48,7 @@ require_once '../includes/functions.php';
                 if ($isFormValid) {
 
                     // Insertion query
-                    $sql = "SELECT password FROM admin WHERE email = ?";
+                    $sql = "SELECT * FROM admin WHERE email = ?";
                     
                     // Prepare the query
                     $stmt = $pdo->prepare($sql);
@@ -57,12 +57,24 @@ require_once '../includes/functions.php';
                     $stmt->execute([$email]);
                     
                     $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+                    var_dump($admin);
                     
                     if ($admin) {
                         // Password verification
                         $passwordHash = $admin['password'];
                         if (password_verify($password, $passwordHash)) {
+                            session_start();
+                            $_SESSION['admin'] = [
+                                'id' => $admin['id'],
+                                'fullName' => $admin['fullName'],
+                                'adminName' => $admin['adminName'],
+                                'email' => $admin['email'],
+                                'role' => $admin['role'],
+                                'password' => $admin['password'],
+                                'date_creation' => $admin['date_creation']
+                            ];
                             header('location: homeAdmin.php');
+                            exit();
                         } else {
                             // Incorrect password
 
