@@ -2,28 +2,23 @@
 // Define the page title
 $pageTitle = 'My Blog - Admin Area';
 
-// start session
-session_start();
-
-// minLength and maxLength for fullName, adminName, role
-$minLengthName = 3;
-$maxLengthName = 55;
-
-// minLength and maxLength for Password;
-$minLengthPassword = 3;
-$maxLengthPassword = 55;
-
 // Include the page header
 require_once '../includes/header.php';
 
 // Include the admin navigation bar
 require_once '../includes/navBarAdmin.php';
 
+//config
+require_once '../includes/config.php';
+
 // database conn
 require_once '../includes/conn_db.php';
 
 //functions
 require_once '../includes/functions.php';
+
+// check if the admin is connected
+checkAdminSession();
 
 //select item admin 
 $sqlStatement = $pdo->prepare('SELECT fullName, adminName, email, role FROM admin WHERE id=?');

@@ -2,28 +2,23 @@
 // Define the page title
 $pageTitle = 'My Blog - Admin Area';
 
-// start session
-session_start();
-
-// minLength and maxLength for Title
-$minLengthTitle = 3;
-$maxLengthTitle = 55;
-
-// minLength and maxLength for Content;
-$minLengthContent = 7;
-$maxLengthContent = 2000;
-
 // Include the page header
 require_once '../includes/header.php';
 
 // Include the admin navigation bar
 require_once '../includes/navBarAdmin.php';
 
+//config
+require_once '../includes/config.php';
+
 // database conn
 require_once '../includes/conn_db.php';
 
 //functions
 require_once '../includes/functions.php';
+
+// check if the admin is connected
+checkAdminSession();
 
 // Prepare and execute the SELECT query 'select categories'
 $sqlStatement = $pdo->prepare('SELECT id, name FROM category');

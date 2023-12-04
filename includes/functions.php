@@ -59,3 +59,15 @@ function isValidPassword($password, $minLength, $maxLength)
 
     return true;
 }
+
+// Check if the admin is connected else Redirect to the login page if he is not 
+function checkAdminSession() {
+    // Check if the admin is connected
+    $isAdminConnected = isset($_SESSION['admin']);
+
+    // Redirect to the login page if the admin is not connected
+    if (!$isAdminConnected) {
+        header("Location: login.php");
+        exit();
+    }
+}

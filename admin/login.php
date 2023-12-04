@@ -2,21 +2,28 @@
 // Define the page title
 $pageTitle = 'Log in';
 
-// minLength and maxLength for Password;
-$minLengthPassword = 3;
-$maxLengthPassword = 55;
-
 // Include the page header
 require_once '../includes/header.php';
 
 // Include the admin navigation bar
 require_once '../includes/navBarAdmin.php';
 
+//config
+require_once '../includes/config.php';
+
 // database conn
 require_once '../includes/conn_db.php';
 
 //functions
 require_once '../includes/functions.php';
+
+$isAdminConnected = isset($_SESSION['admin']);
+
+// Redirect to homeAdmin.php if the admin is connected
+if ($isAdminConnected) {
+header("Location: homeAdmin.php");
+exit();
+}
 ?>
 
 <div class="container">
