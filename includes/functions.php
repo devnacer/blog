@@ -71,3 +71,8 @@ function checkAdminSession() {
         exit();
     }
 }
+
+// Function to check if the admin has the right to edit/delete
+function canEditDeleteAdmin($adminRole) {
+    return $adminRole === 'admin';
+}

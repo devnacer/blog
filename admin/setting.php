@@ -19,10 +19,17 @@ require_once '../includes/functions.php';
 
 // check if the admin is connected
 checkAdminSession();
+
+//select item admin 
+$id = $_SESSION['admin']['id'];
+$sqlStatement = $pdo->prepare('SELECT fullName, adminName, email, role FROM admin WHERE id=?');
+$sqlStatement->execute([$id]);
+$itemAdmin = $sqlStatement->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container">
-    <h2 class="mt-2">Add Admin</h2>
+    <h2>Setting</h2>
+    <h3 class="mt-2">Edit admin <strong><?= $itemAdmin['adminName'] ?></strong></h3>
 
     <form method="POST">
 
@@ -30,15 +37,14 @@ checkAdminSession();
 
         $isFormValid = true;
 
-        if (isset($_POST['createAdmin'])) {
+        if (isset($_POST['editAdmin'])) {
 
                 $fullName = $_POST['fullName'];
                 $adminName = $_POST['adminName'];
                 $email = $_POST['email'];
-                $role = $_POST['role'];
+                $role = $_SESSION['admin']['role'];
                 $password = $_POST['password'];
                 $confirmPassword = $_POST['confirmPassword'];
-                $dateCreation = date('Y-m-d H:i:s'); 
 
                 // Validate the full name
                 if (!isValidName($fullName, $minLengthName, $maxLengthName)) {
@@ -116,28 +122,30 @@ checkAdminSession();
 
                 if ($isFormValid) {
 
-                    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password using bcrypt
+                    $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hash the password using bcrypt
 
                     // Insertion query
-                    $sql = "INSERT INTO admin (fullname, adminName, email, role, password, date_creation) VALUES (?, ?, ?, ?, ?, ?)";
+                    $sql = "UPDATE admin
+                            SET fullname = ?,
+                                adminName = ?,
+                                email = ?,
+                                role = ?,
+                                password = ? 
+                            WHERE id = ?";
 
                     // Prepare the query
                     $stmt = $pdo->prepare($sql);
 
                     // Execute the query with the provided values
-                    if ($stmt->execute([$fullName, $adminName, $email, $role, $password, $dateCreation  ])) {
+                    if ($stmt->execute([$fullName, $adminName, $email, $role, $password, $id])) {
 
-                            ?>
-                                <div class="alert alert-success" role="alert">
-                                <p>The administrator <strong><?=$adminName?></strong> has been added successfully.</p>
-                                </div>
-                            <?php
+                        header('location: homeAdmin.php');
 
                     } else {
 
                             ?>
-                                <div class="alert alert-success" role="alert">
-                                <p>Error adding the administrator <strong><?=$adminName?></strong>.</p>
+                                <div class="alert alert-warning" role="alert">
+                                <p>Error updating the administrator <strong><?=$adminName?></strong>.</p>
                                 </div>
                             <?php
                             
@@ -149,50 +157,40 @@ checkAdminSession();
 
             <div class="form-group">
                 <label for="fullName" class="form-label mt-4">Full Name</label>
-                <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter full name" required>
+                <input type="text" class="form-control" id="fullName" name="fullName" placeholder="<?= $itemAdmin['fullName'] ?>" required>
             </div>
 
             <div class="form-group">
-                <label for="adminName" class="form-label mt-4">Name</label>
-                <input type="text" class="form-control" id="adminName" name="adminName" placeholder="Enter adminName" required>
+                <label for="adminName" class="form-label mt-4">Admin Name</label>
+                <input type="text" class="form-control" id="adminName" name="adminName" placeholder="<?= $itemAdmin['adminName'] ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="email" class="form-label mt-4">Email address</label>
-                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email" required>
-            </div>
-
-            <div class="form-group">
-                <label for="role" class="form-label mt-4">Role</label>
-                <select id="role" name="role" class="form-control" required>
-                    <option value="editor">Editor</option>
-                    <option value="author">Author</option>
-                    <option value="contributor">Contributor</option>
-                    <option value="subscriber">Subscriber</option>
-                    <option value="guest">Guest</option>
-                    <option value="moderator">Moderator</option>
-                    <option value="manager">Manager</option>
-                    <option value="viewer">Viewer</option>
-                    <option value="designer">Designer</option>
-                    <option value="developer">Developer</option>
-                    <option value="analyst">Analyst</option>
-                    <option value="default" selected>Default</option>
-                </select>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="<?= $itemAdmin['email'] ?>" required>
             </div>
 
             <div class="form-group">
                 <label for "password" class="form-label mt-4">Password</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Password" autocomplete="off" required>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your new password" autocomplete="off" required>
             </div>
 
             <div class="form-group">
                 <label for="confirmPassword" class="form-label mt-4">Confirm Password</label>
-                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" autocomplete="off" required>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your new password" autocomplete="off" required>
             </div>
 
 
-            <input type="submit" name="createAdmin" value="Create Admin" class="btn btn-primary mt-4 mb-4">
+            <input type="submit" name="editAdmin" value="Edit Admin" class="btn btn-primary mt-4 mb-4">
 
     </form>
 
+    <?php if (!canEditDeleteAdmin($adminRole)): ?>
+        
+    <h3 class="mt-2">You want to delete your account <strong><?= $itemAdmin['adminName'] ?></strong></h3>
+    
+
+    <a href="admin_delete_account.php?id=<?= $id ?>" onclick="return confirm('Are you sure you want to delete your account <?= $itemAdmin['adminName'] ?>?');" class="btn btn-danger mb-2">Delete my account</a>
+    
+    <?php endif; ?>
 </div>

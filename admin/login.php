@@ -64,7 +64,6 @@ exit();
                     $stmt->execute([$email]);
                     
                     $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-                    var_dump($admin);
                     
                     if ($admin) {
                         // Password verification
