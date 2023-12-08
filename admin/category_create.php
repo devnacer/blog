@@ -34,6 +34,7 @@ checkAdminSession();
 
                 $categoryName = $_POST['categoryName'];
                 $categoryDescription = $_POST['categoryDescription'];
+                $dateCreation = date('Y-m-d H:i:s'); 
             
                 // Validate the category name
                 if (!isValidName($categoryName, $minLengthCategoryName, $maxLengthCategoryName)) {
@@ -64,13 +65,13 @@ checkAdminSession();
 
 
                     // Insertion query
-                    $sql = "INSERT INTO category (name, description) VALUES (?, ?)";
+                    $sql = "INSERT INTO category (name, description, date_creation) VALUES (?, ?, ?)";
 
                     // Prepare the query
                     $stmt = $pdo->prepare($sql);
 
                     // Execute the query with the provided values
-                    if ($stmt->execute([$categoryName, $categoryDescription])) {
+                    if ($stmt->execute([$categoryName, $categoryDescription, $dateCreation])) {
 
                             ?>
                                 <div class="alert alert-success" role="alert">

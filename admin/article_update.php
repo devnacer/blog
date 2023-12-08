@@ -24,10 +24,23 @@ checkAdminSession();
 $sqlStatement = $pdo->prepare('SELECT id, name FROM category');
 $sqlStatement->execute();
 $categories = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
+// Prepare and execute the SELECT query 'select article'
+$idArticle = $_GET['id'];
+$sqlsArticle = $pdo->prepare('SELECT * FROM article WHERE id = ?');
+$sqlsArticle->execute([$idArticle]);
+$itemArticle = $sqlsArticle->fetch(PDO::FETCH_ASSOC);
+//id image
+$idImage = $itemArticle['id_image'];
+
+
+
+echo('<pre>');
+var_dump($itemArticle);
+echo('</pre>');
 ?>
 
 <div class="container">
-    <h2 class="mt-2">Add article</h2>
+    <h2 class="mt-2">Update article</h2>
 
     <form method="POST" enctype="multipart/form-data">
 
@@ -35,7 +48,7 @@ $categories = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
 
         $isFormValid = true;
 
-        if (isset($_POST['createArticle'])) {
+        if (isset($_POST['updateArticle'])) {
 
                 $title = $_POST['title'];
                 $content = $_POST['content'];
@@ -43,8 +56,8 @@ $categories = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
                 $id_author = $_SESSION['admin']['id'];
                 $dateCreation = date('Y-m-d H:i:s'); 
                  
-                $id_image = 'blog.jpg'; 
-                if(!empty($_FILES['image'])){
+                $id_image = ''; 
+                if(isset($_FILES['image'])){
                     $imageName = $_FILES['image']['name'];
                     $id_image = uniqid().$imageName;
                     move_uploaded_file($_FILES['image']['tmp_name'], '../uploaded/'.$id_image);
@@ -88,7 +101,7 @@ $categories = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
 
                             ?>
                                 <div class="alert alert-success" role="alert">
-                                <p>The article <strong><?=$title?></strong> has been added successfully.</p>
+                                <p>The article <strong><?=$title?></strong> has been updated successfully.</p>
                                 </div>
                             <?php
 
@@ -96,7 +109,7 @@ $categories = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
 
                             ?>
                                 <div class="alert alert-success" role="alert">
-                                <p>Error adding the article <strong><?=$title?></strong>.</p>
+                                <p>Error updeting the article <strong><?=$title?></strong>.</p>
                                 </div>
                             <?php
                             
@@ -108,12 +121,12 @@ $categories = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
 
             <div class="form-group">
                 <label for="fullName" class="form-label mt-4">Title</label>
-                <input type="text" class="form-control" id="title" name="title" placeholder="Enter the title" required>
+                <input type="text" class="form-control" id="title" name="title" placeholder="<?= $itemArticle['title']?>" required>
             </div>
 
             <div class="form-group">
                 <label for="content" class="form-label mt-4">Content</label>
-                <textarea class="form-control" id="content" name="content" placeholder="Enter the content (min. 7, max. 2000 characters" cols="30" rows="10" required></textarea>
+                <textarea class="form-control" id="content" name="content" placeholder="<?= $itemArticle['content']?>" rows="10" required></textarea>
             </div>
 
 
@@ -137,7 +150,7 @@ $categories = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
 
             
 
-            <input type="submit" name="createArticle" value="Add article" class="btn btn-primary mt-4 mb-4">
+            <input type="submit" name="updateArticle" value="Update article" class="btn btn-primary mt-4 mb-4">
 
     </form>
 

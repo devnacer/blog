@@ -13,10 +13,10 @@ $maxLengthPassword = 55;
 //-------config of article_create.php / -----------------------
 // minLength and maxLength for Title
 $minLengthTitle = 3;
-$maxLengthTitle = 55;
+$maxLengthTitle = 255;
 // minLength and maxLength for Content;
 $minLengthContent = 7;
-$maxLengthContent = 2000;
+$maxLengthContent = 7000;
 //-------end of config article_create.php / --------------------
 
 

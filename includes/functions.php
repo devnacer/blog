@@ -15,10 +15,10 @@ function isValidName($value, $minLength, $maxLength)
         return false;
     }
 
-    // Check if the field contains only alphabetic characters and spaces
-    if (!preg_match('/^[A-Za-z ]+$/', $value)) {
-        return false;
-    }
+    // Check if the field contains only alphabetic characters, spaces, and specified accents
+    // if (!preg_match('/^[A-Za-zÀ-ÿ ]+$/u', $value)) {
+    //     return false;
+    // }
 
     return true;
 }

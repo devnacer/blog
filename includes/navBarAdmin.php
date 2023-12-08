@@ -52,6 +52,9 @@ $adminRole = isset($_SESSION['admin']['role']) ? $_SESSION['admin']['role'] : ''
                         Add article</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="article_list.php">List articles</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="setting.php">Setting</a>
                     </li>
                     <li class="nav-item">
