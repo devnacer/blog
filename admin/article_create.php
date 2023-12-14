@@ -44,7 +44,8 @@ $categories = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
                 $dateCreation = date('Y-m-d H:i:s'); 
                  
                 $id_image = 'blog.jpg'; 
-                if(!empty($_FILES['image'])){
+
+                if(!empty($_FILES['image']['name'])){
                     $imageName = $_FILES['image']['name'];
                     $id_image = uniqid().$imageName;
                     move_uploaded_file($_FILES['image']['tmp_name'], '../uploaded/'.$id_image);
@@ -86,11 +87,7 @@ $categories = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
                     // Execute the query with the provided values
                     if ($stmt->execute([$title, $content, $category, $id_author, $id_image, $dateCreation])) {
 
-                            ?>
-                                <div class="alert alert-success" role="alert">
-                                <p>The article <strong><?=$title?></strong> has been added successfully.</p>
-                                </div>
-                            <?php
+                        header('location: article_list.php');
 
                     } else {
 
@@ -120,7 +117,7 @@ $categories = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
             <div class="form-group">
                 <label for="category" class="form-label mt-4">Category</label>
                 <select name="category" class="form-control">
-                    <option value="">Choose a category</option>
+                    <option value="" disabled selected>Choose a category</option>
                     <?php foreach($categories as $category) :?>
                     <option value="<?= $category['id']?>">
                             <?= $category['name']?>

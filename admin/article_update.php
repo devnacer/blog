@@ -29,14 +29,6 @@ $idArticle = $_GET['id'];
 $sqlsArticle = $pdo->prepare('SELECT * FROM article WHERE id = ?');
 $sqlsArticle->execute([$idArticle]);
 $itemArticle = $sqlsArticle->fetch(PDO::FETCH_ASSOC);
-//id image
-$idImage = $itemArticle['id_image'];
-
-
-
-echo('<pre>');
-var_dump($itemArticle);
-echo('</pre>');
 ?>
 
 <div class="container">
@@ -54,7 +46,7 @@ echo('</pre>');
                 $content = $_POST['content'];
                 $category = $_POST['category'];
                 $id_author = $_SESSION['admin']['id'];
-                $dateCreation = date('Y-m-d H:i:s'); 
+                // $dateCreation = date('Y-m-d H:i:s'); 
                  
                 $id_image = ''; 
                 if(isset($_FILES['image'])){
@@ -90,30 +82,67 @@ echo('</pre>');
 
                 if ($isFormValid) {
 
-                    // Insertion query
-                    $sql = "INSERT INTO article (title, content, id_category, id_author, id_image, date_creation) VALUES (?, ?, ?, ?, ?, ?)";
+                    if($id_image){
 
-                    // Prepare the query
-                    $stmt = $pdo->prepare($sql);
+                        // Insertion query
+                        $sql = "UPDATE article 
+                                SET title = ?, 
+                                    content = ?, 
+                                    id_category = ?, 
+                                    id_author = ?, 
+                                    id_image = ?
+                                    -- date_creation = ? 
+                                WHERE id = ?";
+    
+                        // Prepare the query
+                        $stmt = $pdo->prepare($sql);
+    
+                        // Execute the query with the provided values
+                        if ($stmt->execute([$title, $content, $category, $id_author, $id_image, $idArticle])) {
+    
+                            header('location: article_list.php');
+    
+                        } else {
+    
+                                ?>
+                                    <div class="alert alert-success" role="alert">
+                                    <p>Error updeting the article <strong><?=$title?></strong>.</p>
+                                    </div>
+                                <?php
+                                
+                        }
 
-                    // Execute the query with the provided values
-                    if ($stmt->execute([$title, $content, $category, $id_author, $id_image, $dateCreation])) {
+                    }else{
 
-                            ?>
-                                <div class="alert alert-success" role="alert">
-                                <p>The article <strong><?=$title?></strong> has been updated successfully.</p>
-                                </div>
-                            <?php
+                        // Insertion query
+                        $sql = "UPDATE article 
+                        SET title = ?, 
+                            content = ?, 
+                            id_category = ?, 
+                            id_author = ? 
+                            -- date_creation = ? 
+                        WHERE id = ?";
+                   
+                        // Prepare the query
+                        $stmt = $pdo->prepare($sql);
+    
+                        // Execute the query with the provided values
+                        if ($stmt->execute([$title, $content, $category, $id_author, $idArticle])) {
+    
+                            header('location: article_list.php');
+    
+                        } else {
+    
+                                ?>
+                                    <div class="alert alert-success" role="alert">
+                                    <p>Error updeting the article <strong><?=$title?></strong>.</p>
+                                    </div>
+                                <?php
+                                
+                        }
 
-                    } else {
-
-                            ?>
-                                <div class="alert alert-success" role="alert">
-                                <p>Error updeting the article <strong><?=$title?></strong>.</p>
-                                </div>
-                            <?php
-                            
                     }
+
                 }
 
             }
@@ -133,7 +162,7 @@ echo('</pre>');
             <div class="form-group">
                 <label for="category" class="form-label mt-4">Category</label>
                 <select name="category" class="form-control">
-                    <option value="">Choose a category</option>
+                    <option value="<?= $itemArticle['id_category']?>" >Choose a category</option>
                     <?php foreach($categories as $category) :?>
                     <option value="<?= $category['id']?>">
                             <?= $category['name']?>
@@ -145,7 +174,8 @@ echo('</pre>');
             
             <div class="form-group">
                 <label for="image" class="form-label mt-4">Image</label>
-                <input type="file" class="form-control" id="image" name="image" placeholder="Enter your image">
+                <input type="file" class="form-control" id="image" name="image" placeholder="Enter your image"><br >
+                <img width="300px" class="img img-fluid" src="../uploaded/<?= $itemArticle['id_image']?>" alt="">
             </div>
 
             
