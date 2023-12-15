@@ -65,7 +65,7 @@ $listArticle = $sqlStatement->fetchAll(PDO::FETCH_ASSOC);
 
                 <td>
                         
-                    <a href="article_view.php?id=<?php echo $itemArticle['id'] ?>" class="btn btn-primary">View</a>
+                    <a href="article_view.php?id=<?php echo $itemArticle['id'] ?>" class="btn btn-info">View</a>
 
                     <a href="article_update.php?id=<?php echo $itemArticle['id'] ?>" class="btn btn-primary">Edit</a>
 

@@ -52,10 +52,10 @@ $adminRole = isset($_SESSION['admin']['role']) ? $_SESSION['admin']['role'] : ''
                         Add article</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="article_list.php">List articles</a>
+                        <a class="nav-link <?php if ($currentPage == '/blog/admin/article_list.php') echo 'active' ?>" href="article_list.php">List articles</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="setting.php">Setting</a>
+                        <a class="nav-link <?php if ($currentPage == '/blog/admin/setting.php') echo 'active' ?>" href="setting.php">Setting</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="logout.php">Logout</a>
