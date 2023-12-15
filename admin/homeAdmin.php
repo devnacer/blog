@@ -62,6 +62,14 @@ $titleLastArticlePublishedDate = $sqlstatement->fetch(PDO::FETCH_ASSOC);
 // var_dump($articlesPublishedLastMonth);
 ///°°°°°°°°°°°°°°°°°°
 
+
+
+
+
+
+
+
+
 //Your last articles
 $sqlstate = $pdo->prepare('SELECT *
                             FROM article
@@ -70,16 +78,13 @@ $sqlstate = $pdo->prepare('SELECT *
                             LIMIT 3');
 $sqlstate->execute([$idAdmin]);
 $lastThreeArticles = $sqlstate->fetchAll(PDO::FETCH_ASSOC);
-echo('<pre>');
 
 var_dump($lastThreeArticles);
-echo('<pre>');
-var_dump($lastThreeArticles['title']);
 
 ?>
 
 <div class="container">
-    <p class="h1 my-2">Welcome, <?= $fullNameAdmin ?></p>
+    <p class="h1 my-5">Welcome, <?= $fullNameAdmin ?></p>
 
     <ul class="list-group">
 
@@ -103,22 +108,45 @@ var_dump($lastThreeArticles['title']);
         </li> -->
     </ul>
 
-    <p class="h4 my-3">Your lastest articles <?= $fullNameAdmin ?></p>
+    <p class="h4 my-5">Your lastest articles <?= $fullNameAdmin ?></p>
 
-    <div class="card-group">
-        <?php foreach ($lastThreeArticles as $itemArticle) :?>
-        <div class="card">
-            <img src="<?='../uploaded/'.$itemArticle['id_image']?>" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title"><?= $itemArticle['title']?></h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+            <?php foreach ($lastThreeArticles as $itemArticle) :?>
+
+                <?php //select name categorie
+                    $idCategory = $itemArticle['id_category'];
+                    $sqlStatem = $pdo->prepare('SELECT name FROM category WHERE id = ?');
+                    $sqlStatem->execute([$idCategory]);
+                    $namecategory = $sqlStatem->fetch(PDO::FETCH_ASSOC);
+                ?>
+
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="<?='../uploaded/'.$itemArticle['id_image']?>" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= $itemArticle['title']?></h5>
+                            <p class="card-text">Category: <?= $namecategory['name'] ?></p>
+                        </div>
+                        <div class="card-footer">
+
+                        <?php
+
+                            $publicationDate = $itemArticle['date_creation']; // Remplacez cela par la date réelle de votre article
+                            $elapsedTime = time_elapsed_string($publicationDate);
+                            echo "Last publié $elapsedTime";
+                        
+                        
+                        ?>
+
+
+
+
+                            <small class="text-muted">Last publié <?= $itemArticle['title']?> mins ago</small>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-footer">
-                <small class="text-muted">Last updated 3 mins ago</small>
-            </div>
+            <?php endforeach?>
         </div>
-        <?php endforeach?>
-   </div>
 
 </div>
 
