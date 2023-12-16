@@ -3,7 +3,7 @@
 $pageTitle = 'My Blog - Admin Area';
 
 // Include the page header
-require_once '../includes/header.php';
+require_once '../includes/headAdmin.php';
 
 // Include the admin navigation bar
 require_once '../includes/navBarAdmin.php';
@@ -63,14 +63,7 @@ $titleLastArticlePublishedDate = $sqlstatement->fetch(PDO::FETCH_ASSOC);
 ///°°°°°°°°°°°°°°°°°°
 
 
-
-
-
-
-
-
-
-//Your last articles
+//Your last articles // select lastest 3 article  
 $sqlstate = $pdo->prepare('SELECT *
                             FROM article
                             WHERE id_author = ?
@@ -79,7 +72,7 @@ $sqlstate = $pdo->prepare('SELECT *
 $sqlstate->execute([$idAdmin]);
 $lastThreeArticles = $sqlstate->fetchAll(PDO::FETCH_ASSOC);
 
-var_dump($lastThreeArticles);
+// var_dump($lastThreeArticles);
 
 ?>
 
@@ -110,7 +103,7 @@ var_dump($lastThreeArticles);
 
     <p class="h4 my-5">Your lastest articles <?= $fullNameAdmin ?></p>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
             <?php foreach ($lastThreeArticles as $itemArticle) :?>
 
                 <?php //select name categorie
@@ -122,26 +115,22 @@ var_dump($lastThreeArticles);
 
                 <div class="col">
                     <div class="card h-100">
+
                         <img src="<?='../uploaded/'.$itemArticle['id_image']?>" class="card-img-top" alt="...">
+
                         <div class="card-body">
                             <h5 class="card-title"><?= $itemArticle['title']?></h5>
                             <p class="card-text">Category: <?= $namecategory['name'] ?></p>
                         </div>
+
                         <div class="card-footer">
-
-                        <?php
-
-                            $publicationDate = $itemArticle['date_creation']; // Remplacez cela par la date réelle de votre article
-                            $elapsedTime = time_elapsed_string($publicationDate);
-                            echo "Last publié $elapsedTime";
-                        
-                        
-                        ?>
-
-
-
-
-                            <small class="text-muted">Last publié <?= $itemArticle['title']?> mins ago</small>
+                            <small class="text-muted">
+                                <?php
+                                    $publicationDate = $itemArticle['date_creation']; 
+                                    $elapsedTime = time_elapsed_string($publicationDate);
+                                    echo "Published $elapsedTime";            
+                                ?>
+                            </small>
                         </div>
                     </div>
                 </div>

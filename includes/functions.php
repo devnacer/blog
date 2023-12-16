@@ -77,26 +77,31 @@ function canEditDeleteAdmin($adminRole) {
     return $adminRole === 'admin';
 }
 
-
-
+// Function for diff time 
 function time_elapsed_string($datetime, $full = false) {
+    // Get the current date and time
     $now = new DateTime;
+    // Convert the given date to a DateTime object
     $ago = new DateTime($datetime);
+    // Calculate the difference between the two dates
     $diff = $now->diff($ago);
 
+    // Convert days to weeks for a more user-friendly display
     $diff->w = floor($diff->d / 7);
     $diff->d -= $diff->w * 7;
 
+    // Associative array defining time units
     $string = array(
-        'y' => 'an',
-        'm' => 'mois',
-        'w' => 'semaine',
-        'd' => 'jour',
-        'h' => 'heure',
+        'y' => 'year',
+        'm' => 'month',
+        'w' => 'week',
+        'd' => 'day',
+        'h' => 'hour',
         'i' => 'minute',
-        's' => 'seconde',
+        's' => 'second',
     );
 
+    // Iterate through the array and build the elapsed time string
     foreach ($string as $k => &$v) {
         if ($diff->$k) {
             $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
@@ -105,6 +110,10 @@ function time_elapsed_string($datetime, $full = false) {
         }
     }
 
+    // If full display is not requested, show only one time unit
     if (!$full) $string = array_slice($string, 0, 1);
+    
+    // Return the elapsed time string, or "just now" if there is no significant difference
     return $string ? implode(', ', $string) . ' ago' : 'just now';
 }
+

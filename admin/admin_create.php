@@ -3,7 +3,7 @@
 $pageTitle = 'My Blog - Admin Area';
 
 // Include the page header
-require_once '../includes/header.php';
+require_once '../includes/headAdmin.php';
 
 // Include the admin navigation bar
 require_once '../includes/navBarAdmin.php';
