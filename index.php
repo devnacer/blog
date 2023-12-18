@@ -114,6 +114,7 @@ echo '</pre>';
      <ul class="list-group">
          <?php foreach($categories as $itemCategory):?>
             <?php
+            //select nb category for each aricle
             $itemCategoryId = $itemCategory['id'];
             $slqsNbcateByArticle = $pdo->prepare('SELECT COUNT(*) as articleCount
                                                  FROM article 
