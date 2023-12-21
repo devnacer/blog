@@ -22,9 +22,7 @@ $id = $_GET['id'];
 $sqlStatement = $pdo->prepare('SELECT * FROM article WHERE id = ?');
 $sqlStatement->execute([$id]);
 $itemArticle = $sqlStatement->fetch(PDO::FETCH_ASSOC);
-echo('<pre>');
-//  var_dump($itemArticle);
-echo('</pre>');
+
 // select item category
 $idCategory = $itemArticle['id_category']; 
 $sqls = $pdo->prepare('SELECT name FROM category WHERE id = ?');

@@ -21,9 +21,15 @@ $sqls->execute();
 $categories = $sqls->fetchAll(PDO::FETCH_ASSOC);
 
 // select articles
+$idCateg = $_GET['id'];
+$sqlstm = $pdo->prepare('SELECT * FROM article WHERE id_category = ? ORDER BY date_creation DESC');
+$sqlstm->execute([$idCateg]);
+$articles = $sqlstm->fetchAll(PDO::FETCH_ASSOC);
 
-$articles = $pdo->query('SELECT * FROM article ORDER BY date_creation DESC')->fetchAll(PDO::FETCH_ASSOC);
-
+// select name category
+$sqlsCateName =$pdo->prepare('SELECT name FROM category WHERE id = ?');
+$sqlsCateName->execute([$idCateg]);
+$nameCatego = $sqlsCateName->fetch(PDO::FETCH_ASSOC);
 // echo '<pre>';
 // var_dump($articles);
 // echo '</pre>';
@@ -65,7 +71,7 @@ $articles = $pdo->query('SELECT * FROM article ORDER BY date_creation DESC')->fe
     </div>
 
     <!-- articles -->
-    <h2>Last articles</h2>
+    <h2>Last articles ( <?=$nameCatego['name']?> )</h2>
     <div class="d-flex flex-row justify-content-center flex-wrap gap-3">
         <?php foreach($articles as $article):?>
         <?php
