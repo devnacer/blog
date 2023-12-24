@@ -104,4 +104,6 @@ $articles = $pdo->query('SELECT * FROM article ORDER BY date_creation DESC')->fe
 
 
 </main>
+
+<?php include('includes/footer.php')?>
     
