@@ -111,3 +111,5 @@ $nameCatego = $sqlsCateName->fetch(PDO::FETCH_ASSOC);
 
 </main>
     
+<?php include('includes/footer.php')?>
+

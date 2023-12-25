@@ -1,7 +1,11 @@
-    <footer class="navbar fixed-bottom bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">footer à regler</a>
+<footer class="bg-dark text-light py-4 mt-4">
+    <div class="container">
+        <div class="col-lg-12 text-center">
+            <p class="mb-0">&copy; 2023 MyBlog. All rights reserved.</p>
+        </div>
     </div>
-    </footer>
- </body>
+</footer>
+
+</body>
+
 </html>
