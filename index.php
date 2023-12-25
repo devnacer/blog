@@ -21,9 +21,15 @@ $sqls->execute();
 $categories = $sqls->fetchAll(PDO::FETCH_ASSOC);
 
 // select articles
-
 $articles = $pdo->query('SELECT * FROM article ORDER BY date_creation DESC')->fetchAll(PDO::FETCH_ASSOC);
 
+// select nbr articles in database
+$nbrArticles = $pdo->query('SELECT count(id) as nbr FROM article')->fetchAll(PDO::FETCH_ASSOC);
+
+//pagination
+$nbrArticlesInOnePage = 7;
+$nbrPages = ceil($nbrArticles[0]['nbr'] / $nbrArticlesInOnePage);  
+var_dump($nbrPages);
 // echo '<pre>';
 // var_dump($articles);
 // echo '</pre>';
@@ -100,6 +106,23 @@ $articles = $pdo->query('SELECT * FROM article ORDER BY date_creation DESC')->fe
         <?php endforeach?>
 
     </div>
+
+    <!-- pagination -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+               <a class="page-link">Previous</a>
+            </li>
+
+            <?php foreach ($i=0, $i<$nbrArticlesInOnePage ,$i = $i + 1 ) :?>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <?php endforeach ?>
+
+            <li class="page-item">
+               <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
 
 
 
